@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace AllSpice.Models
 {
-    public class Favorite
-    {
-        
-    }
+  public class Favorite
+  {
+    public int Id { get; set; }
+    public string RecipeId { get; set; }
+    public string AccountId { get; set; }
+  }
 }

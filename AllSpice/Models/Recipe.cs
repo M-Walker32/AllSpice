@@ -14,4 +14,11 @@ namespace AllSpice.Models
     public string CreatorId { get; set; }
     public Profile Creator { get; set; }
   }
+  // TODO ViewModel will go here for favorites
+  public class FavoriteModel : Recipe
+  {
+    public int FavoriteId { get; set; }
+    public string AccountId { get; set; }
+
+  }
 }
