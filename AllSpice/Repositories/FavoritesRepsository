@@ -1,7 +1,0 @@
-namespace AllSpice.Repositories
-{
-  public class FavoritesRepository
-  {
-
-  }
-}

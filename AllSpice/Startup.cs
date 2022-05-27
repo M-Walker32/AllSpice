@@ -39,6 +39,8 @@ namespace AllSpice
       services.AddScoped<RecipesService>();
       services.AddScoped<StepsRepository>();
       services.AddScoped<StepsService>();
+      services.AddScoped<FavoritesRepository>();
+      services.AddScoped<FavoritesService>();
       services.AddScoped<IngredientsRepository>();
       services.AddScoped<IngredientsService>();
     }

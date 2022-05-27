@@ -1,12 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AllSpice.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AllSpice.Controllers
 {
-    public class FavoritesController
+  [ApiController]
+  [Route("api/[controller]")]
+  public class FavoritesController : ControllerBase
+  {
+    private readonly FavoritesService _fs;
+
+    public FavoritesController(FavoritesService fs)
     {
-        
+      _fs = fs;
     }
+  }
+
 }
