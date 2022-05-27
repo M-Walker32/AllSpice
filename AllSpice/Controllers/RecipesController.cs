@@ -14,10 +14,14 @@ namespace AllSpice.Controllers
   public class RecipesController : ControllerBase
   {
     private readonly RecipesService _rs;
+    private readonly StepsService _ss;
+    private readonly IngredientsService _ings;
 
-    public RecipesController(RecipesService rs)
+    public RecipesController(RecipesService rs, StepsService ss, IngredientsService ings)
     {
       _rs = rs;
+      _ss = ss;
+      _ings = ings;
     }
 
     // GET
@@ -48,9 +52,37 @@ namespace AllSpice.Controllers
         return Ok(e.Message);
       }
     }
+    // Get Steps by Recipe
+    [HttpGet("{id}/steps")]
+    public ActionResult<List<Step>> GetSteps(int id)
+    {
+      try
+      {
+        List<Step> steps = _ss.GetSteps(id);
+        return Ok(steps);
+      }
+      catch (Exception e)
+      {
+        return Ok(e.Message);
+      }
+    }
+    // Get ingredients by Recipe
+    [HttpGet("{id}/ingredients")]
+    public ActionResult<List<Ingredient>> GetIngredients(int id)
+    {
+      try
+      {
+        List<Ingredient> ingredients = _ings.GetIngredients(id);
+        return Ok(ingredients);
+      }
+      catch (Exception e)
+      {
+        return Ok(e.Message);
+      }
+    }
     // CREATE
-    [Authorize]
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Recipe>> Create([FromBody] Recipe recipeData)
     {
       try
@@ -67,6 +99,39 @@ namespace AllSpice.Controllers
       }
     }
     // EDIT
+    [HttpPut("{id}")]
+    [Authorize]
+    public async Task<ActionResult<Recipe>> Edit(int id, [FromBody] Recipe recipeData)
+    {
+      try
+      {
+        Account userinfo = await HttpContext.GetUserInfoAsync<Account>();
+        recipeData.CreatorId = userinfo.Id;
+        recipeData.Id = id;
+        Recipe recipe = _rs.Edit(recipeData);
+        return Ok(recipe);
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
     // DELETE
+    [HttpDelete("{id}")]
+    [Authorize]
+    public async Task<ActionResult<Recipe>> Remove(int id)
+    {
+      try
+      {
+        Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+        _rs.Delete(id, userInfo.Id);
+        return Ok("delorted");
+
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
   }
 }

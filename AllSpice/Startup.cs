@@ -37,6 +37,10 @@ namespace AllSpice
       services.AddScoped<AccountService>();
       services.AddScoped<RecipesRepository>();
       services.AddScoped<RecipesService>();
+      services.AddScoped<StepsRepository>();
+      services.AddScoped<StepsService>();
+      services.AddScoped<IngredientsRepository>();
+      services.AddScoped<IngredientsService>();
     }
 
     private void ConfigureCors(IServiceCollection services)
@@ -45,14 +49,14 @@ namespace AllSpice
       {
         options.AddPolicy("CorsDevPolicy", builder =>
               {
-            builder
-                  .AllowAnyMethod()
-                  .AllowAnyHeader()
-                  .AllowCredentials()
-                  .WithOrigins(new string[]{
+                builder
+                      .AllowAnyMethod()
+                      .AllowAnyHeader()
+                      .AllowCredentials()
+                      .WithOrigins(new string[]{
                         "http://localhost:8080", "http://localhost:8081"
+                  });
               });
-          });
       });
     }
 
