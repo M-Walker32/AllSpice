@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -14,28 +13,42 @@ namespace AllSpice.Repositories
     {
       _db = db;
     }
-
+    // GET users favorites
     internal List<FavoriteModel> GetFavoritedRecipes(string id)
     {
       string sql = @"
-      SELECT 
-      act.*
-      r.*,
-      f.id AS favoriteID
-      FROM favorites f
-      JOIN recipes r ON f.recipeId = r.id
-      JOIN accounts act ON a.creatorId = act.id
-      WHERE f.accountId = @id";
-      return _db.Query<Account, FavoriteModel, FavoriteModel>(sql, (act, fave) =>
+            SELECT 
+            act.*,
+            f.*,
+            r.*
+            FROM favorites f
+            JOIN recipes r ON f.recipeId = r.id
+            JOIN accounts act ON r.creatorId = act.id
+            WHERE f.accountId = @id;
+            ";
+      List<FavoriteModel> recipes = _db.Query<Account, Favorite, FavoriteModel, FavoriteModel>(sql, (act, f, r) =>
       {
-        fave.Creator = act;
-        return fave;
-      }, new { id }).ToList();
+        r.Creator = act;
+        r.FavoriteId = f.Id;
+        return r;
+      }, new { id }).ToList<FavoriteModel>();
+      return recipes;
     }
 
-    internal Recipe Get(int id)
+    internal Favorite Get(int id)
     {
-      throw new NotImplementedException();
+      string sql = @"
+      SELECT
+      i.*,
+      act.*
+      FROM ingredients i
+      JOIN accounts act ON i.creatorId = act.Id
+      WHERE i.id = @id";
+      return _db.Query<Favorite, Account, Favorite>(sql, (favorite, account) =>
+      {
+        favorite.AccountId = account.Id;
+        return favorite;
+      }, new { id }).FirstOrDefault();
     }
 
     // CREATE
@@ -44,9 +57,9 @@ namespace AllSpice.Repositories
     {
       string sql = @"
       INSERT INTO favorites
-      (recipeId, accountId)
+      (recipeId, creatorId, accountId)
       VALUES
-      (@RecipeId, @AccountId);
+      (@RecipeId, @CreatorId, @AccountId);
       SELECT LAST_INSERT_ID();";
       favoriteData.Id = _db.ExecuteScalar<int>(sql, favoriteData);
       return favoriteData;

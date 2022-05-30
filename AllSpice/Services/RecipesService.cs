@@ -27,6 +27,12 @@ namespace AllSpice.Services
       }
       return recipe;
     }
+    // GET users recipes
+    // internal Recipe GetUsersRecipes(string id)
+    // {
+    //   Recipe recipes = _repo.GetUsersRecipes(id);
+    //   return recipes;
+    // }
     // CREATE
     internal Recipe Create(Recipe recipeData)
     {

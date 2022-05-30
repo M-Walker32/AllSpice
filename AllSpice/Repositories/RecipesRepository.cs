@@ -44,6 +44,22 @@ namespace AllSpice.Repositories
         return recipe;
       }, new { id }).FirstOrDefault();
     }
+    // GET users recipes
+    // internal List<Recipe> GetUsersRecipes(string id)
+    // {
+    //   string sql = @"
+    //   SELECT
+    //     r.*,
+    //     act.*
+    //   FROM recipes r
+    //   JOIN accounts act ON r.creatorId =act.id";
+    //   return _db.Query<Recipe, Account, Recipe>(sql, (recipe, account) =>
+    //   {
+    //     recipe.Creator = account;
+    //     return recipe;
+    //   }).ToList();
+    // }
+
     // CREATE
     internal Recipe Create(Recipe recipeData)
     {

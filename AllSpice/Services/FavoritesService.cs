@@ -21,14 +21,14 @@ namespace AllSpice.Services
       return _repo.GetFavoritedRecipes(id);
     }
     // GET BY ID
-    internal Recipe Get(int id)
+    internal Favorite Get(int id)
     {
-      Recipe recipe = _repo.Get(id);
-      if (recipe == null)
+      Favorite favorite = _repo.Get(id);
+      if (favorite == null)
       {
         throw new Exception("Invalid Id");
       }
-      return recipe;
+      return favorite;
     }
     // CREATE
     internal Favorite Create(Favorite favoriteData)
@@ -38,8 +38,8 @@ namespace AllSpice.Services
     // DELETE
     internal void Delete(int id, string userId)
     {
-      Recipe recipe = Get(id);
-      if (recipe.CreatorId != userId)
+      Favorite favorite = Get(id);
+      if (favorite.AccountId != userId)
       {
         throw new Exception("You cannot delete this!");
       }

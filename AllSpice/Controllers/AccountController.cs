@@ -15,13 +15,15 @@ namespace AllSpice.Controllers
   {
     private readonly AccountService _accountService;
     private readonly FavoritesService _fs;
+    private readonly RecipesService _rs;
 
-    public AccountController(AccountService accountService, FavoritesService fs)
+    public AccountController(AccountService accountService, FavoritesService fs, RecipesService rs)
     {
       _accountService = accountService;
       _fs = fs;
+      _rs = rs;
     }
-
+    // Get Account
     [HttpGet]
     [Authorize]
     public async Task<ActionResult<Account>> Get()
@@ -36,32 +38,15 @@ namespace AllSpice.Controllers
         return BadRequest(e.Message);
       }
     }
-    // Get Users Favorited Recipes
-    [HttpGet("recipes")]
-    [Authorize]
+    // Get Users Favorites
+    [HttpGet("Favorites")]
     public async Task<ActionResult<List<FavoriteModel>>> GetFavoritedRecipes()
     {
       try
       {
         Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-        List<FavoriteModel> recipe = _fs.GetFavoritedRecipes(userInfo.Id);
-        return Ok(recipe);
-      }
-      catch (Exception e)
-      {
-        return BadRequest(e.Message);
-      }
-    }
-    [HttpPost]
-    [Authorize]
-    public async Task<ActionResult<FavoriteModel>> Create([FromBody] Favorite favoriteData)
-    {
-      try
-      {
-        Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-        favoriteData.AccountId = userInfo.Id;
-        Favorite favorite = _fs.Create(favoriteData);
-        return Ok(favorite);
+        List<FavoriteModel> recipes = _fs.GetFavoritedRecipes(userInfo.Id);
+        return Ok(recipes);
       }
       catch (Exception e)
       {
