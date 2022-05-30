@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid w-100">
-    <div class="row-fluid d-flex">
+    <div v-if="recipe.picture" class="row-fluid d-flex">
       <div class="col-md-4 h-100 col-12">
         <img class="img-fluid pb-2" :src="recipe.picture" :alt="recipe.title" />
       </div>
@@ -58,6 +58,11 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -69,18 +74,30 @@ import { onMounted, watchEffect } from "@vue/runtime-core"
 import { logger } from "../utils/Logger.js"
 import Pop from "../utils/Pop.js"
 import { ingredientsService } from "../services/IngredientsService.js"
+import { useRoute } from "vue-router"
+import { recipesService } from "../services/RecipesService.js"
 export default {
   setup() {
+    let route = useRoute()
     let recipe = AppState.activeRecipe
-    onMounted(async () => {
-      try {
-        logger.log('WHAT AM I< DO TELL', recipe)
-        // await ingredientsService.getIngredients(recipe)
-      } catch (error) {
-        logger.error(error)
-        Pop.toast(error.message, 'error')
-      }
-    })
+    // onMounted(async () => {
+    //   try {
+    //     await recipesService.getById(AppState.activeRecipe.id)
+    //   } catch (error) {
+    //     logger.error(error)
+    //     Pop.toast(error.message, 'error')
+    //   }
+    // })
+    // watchEffect(async () => {
+    //   if (recipe.id) {
+    //     try {
+    //       await ingredientsService.getIngredients(recipe.id)
+    //     } catch (error) {
+    //       logger.error(error)
+    //       Pop.toast(error.message, 'error')
+    //     }
+    //   }
+    // })
     return {
       recipe: computed(() => AppState.activeRecipe),
       ingredient: computed(() => AppState.ingredient)

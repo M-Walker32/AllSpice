@@ -10,6 +10,7 @@
       +
     </button>
   </main>
+  <!-- MODAL -->
   <Modal id="create-recipe-modal">
     <template #modal-title-slot>
       <h4>Create a New Recipe</h4>
