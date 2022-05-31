@@ -8,7 +8,10 @@
         />
         <div class="position-absolute text-center m-4">
           <h1>AllSpice</h1>
-          <h5>quirky cookign slogan goes here</h5>
+          <h5>cookin cooking cookin cooking</h5>
+        </div>
+        <div class="text-right place">
+          <Login />
         </div>
       </div>
       <div class="nav-bar col-12 d-flex justify-content-center">
@@ -55,5 +58,10 @@ export default {
   height: 25vh;
   object-fit: cover;
   align-content: center;
+}
+.place {
+  position: absolute;
+  right: 3em;
+  top: 1em;
 }
 </style>

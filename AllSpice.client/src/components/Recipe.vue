@@ -16,7 +16,7 @@
           />
           <i
             @click="unfavorite(recipe.id)"
-            class="mdi mdi-heart ms-2"
+            class="mdi mdi-heart ms-2 selectable"
             title="unfavorite recipe"
           />
         </p>
@@ -95,10 +95,10 @@
               <div class="card-body">
                 <p class="card-text text-wrap" id="task">
                   <!-- Steps Here -->
-                  <!-- <Step v-for="s in steps" :key="s.id" :step="s"/> -->
+                  <Step v-for="s in step" :key="s.id" :step="s" />
                 </p>
               </div>
-              <form @submit.prevent="addStep">
+              <form @submit.prevent="addStep(activeRecipe.id)">
                 <div class="m-1 d-flex">
                   <input
                     type="number"
@@ -147,6 +147,8 @@ import { logger } from "../utils/Logger.js"
 import Pop from "../utils/Pop.js"
 import { onMounted, watchEffect } from "@vue/runtime-core"
 import { ingredientsService } from "../services/IngredientsService.js"
+import { stepsService } from "../services/StepsService.js"
+import { favoritesService } from "../services/FavoritesService.js"
 export default {
   props: {
     recipe: {
@@ -159,6 +161,7 @@ export default {
     const ingredientData = ref({})
     const stepData = ref({})
     const activeRecipe = AppState.activeRecipe
+    const favorite = ref({})
     return {
       activeRecipe,
       ingredientData,
@@ -173,6 +176,18 @@ export default {
           logger.error(error)
           Pop.toast(error.message, 'error')
           ingredientData.value = ''
+        }
+      },
+      async addStep(id) {
+        try {
+          stepData.value.recipeId = id.toString()
+          logger.log('step obj', stepData)
+          const newStep = await stepsService.addStep(stepData.value, id)
+          stepData.value = ''
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+          stepData.value = ''
         }
       },
       async deleteRecipe() {
@@ -194,10 +209,23 @@ export default {
           Pop.toast(error.message, 'error')
         }
       },
-      async favorite(recipeId) {
+      async favorite(id) {
         try {
-          // TODO logic on data passed to create a favorite, make the favorite service
-          await favoritesService.createFavorite(favorite)
+          favorite.value.recipeId = id.toString()
+          favorite.value.accountId = AppState.account.id
+          logger.log(favorite.value)
+          await favoritesService.createFavorite(favorite.value)
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      },
+      async unfavorite(id) {
+        try {
+          favorite.value.recipeId = id.toString()
+          favorite.value.accountId = AppState.account.id
+          logger.log(favorite.value)
+          await favoritesService.deleteFavorite(favorite.value)
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')
@@ -205,7 +233,8 @@ export default {
       },
       activeRecipe: computed(() => AppState.activeRecipe),
       ingredient: computed(() => AppState.ingredients),
-      step: computed(() => AppState.steps)
+      step: computed(() => AppState.steps),
+      account: computed(() => AppState.account)
     }
   }
 }

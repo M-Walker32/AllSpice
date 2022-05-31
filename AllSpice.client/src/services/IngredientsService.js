@@ -11,7 +11,8 @@ async getIngredients(recipeId){
 async addIngredient(data){
 const ingredient = await api.post('api/ingredients', data)
 logger.log(ingredient.data)
-// this.getIngredients(ingredient.recipeId)
+// the line below might not work
+this.getIngredients(ingredient.data.recipeId)
 }
 }
 export const ingredientsService = new IngredientsService
