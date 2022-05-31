@@ -62,7 +62,10 @@
                 </p>
               </div>
               <div class="m-1 d-flex">
-                <form @submit.prevent="addIngredient(activeRecipe.id)">
+                <form
+                  class="d-flex m-1"
+                  @submit.prevent="addIngredient(activeRecipe.id)"
+                >
                   <input
                     type="text"
                     class="form-control text-wrap m-1"
@@ -181,6 +184,7 @@ export default {
       async addStep(id) {
         try {
           stepData.value.recipeId = id.toString()
+          stepData.value.position = stepData.value.position.toString()
           logger.log('step obj', stepData)
           const newStep = await stepsService.addStep(stepData.value, id)
           stepData.value = ''

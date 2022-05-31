@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex">
-    <h3>{{ step.position }}</h3>
-    <h3 class="ms-2">{{ step.body }}</h3>
+    <p>{{ step.position }}</p>
+    <p class="ms-2">{{ step.body }}</p>
   </div>
 </template>
 

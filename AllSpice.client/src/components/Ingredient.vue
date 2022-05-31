@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex">
-    <h3>{{ ingredient.name }}</h3>
-    <h3>{{ ingredient.quantity }}</h3>
+    <p>{{ ingredient.name }}</p>
+    <p class="ms-1">{{ ingredient.quantity }}</p>
   </div>
 </template>
 
